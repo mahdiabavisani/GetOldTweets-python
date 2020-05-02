@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys,getopt,datetime,codecs
+import sys,getopt,datetime,codecs,re
 if sys.version_info[0] < 3:
     import got
 else:
@@ -64,6 +64,8 @@ def main(argv):
 		def receiveBuffer(tweets):
 			for t in tweets:
 				t.text =    t.text.replace(";"," ")
+				numRT = [int(i) for i in re.findall(r'\b\d+\b', t.retweets)]
+				t.retweets = numRT[0]
 				outputFile.write(('\n%s;%s;%d;%d;"%s";%s;%s;%s;"%s";%s' % (t.username, t.date.strftime("%Y-%m-%d %H:%M"), t.retweets, t.favorites, t.text, t.geo, t.mentions, t.hashtags, t.id, t.permalink)))
 			outputFile.flush()
 			print('More %d saved on file...\n' % len(tweets))
